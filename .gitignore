@@ -2,4 +2,5 @@ venv
 .idea
 __pycache__
 **/migrations/*
+**/media/*
 !**/migrations/__init__.py
