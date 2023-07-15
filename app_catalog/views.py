@@ -23,7 +23,12 @@ def contacts_view(request):
 
 
 
-
+def product_view(request, pk):
+    product = Product.objects.get(pk=pk)
+    context = {
+        'product': product
+    }
+    return render(request, 'catalog/product.html', context=context)
 
 
 
