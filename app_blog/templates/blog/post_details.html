@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+{% load mediapath %}
+
+{% block title %}{{ post.name }}{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Skystore</h1>
+    <p class="lead">Skystore - это отличный вариант хранения ваших плагинов и примеров кода, который вы бы хотели
+        продать</p>
+</div>
+
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h2 class="my-0 font-weight-normal">{{ post.name }}</h2>
+                </div>
+                <div class="card-body">
+                    <img src="{% mediapath post.image %}">
+                    <p>{{ post.description}}</p>
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>- Создан: {{ post.created_at }}</li>
+                        <li>- Просмотров: {{ post.view_count }}</li>
+
+                    </ul>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" ><a href="{% url 'post_edit' post.slug %}" style="text-decoration: none;">Редактировать пост</a></button>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" ><a href="{% url 'post_delete' post.slug %}" style="text-decoration: none;">Удалить пост</a></button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,35 +1,29 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, TemplateView
 
 from app_catalog.models import Product
 
 # Create your views here.
 
 
-def index_view(request):
-    products = Product.objects.all()
-    context = {
-        'products': products
-    }
-    return render(request, 'catalog/index.html', context=context)
+class IndexView(ListView):
+    model = Product
+    template_name = 'catalog/index.html'
 
 
-def contacts_view(request):
-    if request.method == 'POST':
+class ContactsView(TemplateView):
+    template_name = 'catalog/contacts.html'
+
+    def post(self, request):
         name = request.POST.get('name')
         phone = request.POST.get('phone')
         message = request.POST.get('message')
         print(f'{name} {phone} {message}')
-    return render(request, 'catalog/contacts.html')
+        return render(request, 'catalog/contacts.html')
 
 
-
-def product_view(request, pk):
-    product = Product.objects.get(pk=pk)
-    context = {
-        'product': product
-    }
-    return render(request, 'catalog/product.html', context=context)
-
-
-
-
+class ProductView(DetailView):
+    model = Product
+    template_name = 'catalog/product.html'
+    context_object_name = "product"

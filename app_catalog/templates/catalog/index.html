@@ -10,18 +10,18 @@
         продать</p>
 </div>
 
-{% for product in products %}
+{% for object in object_list %}
 <div class="container">
     <div class="row text-center">
         <div class="col-3">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal"><a href="{% url 'product' product.pk%}">{{ product.name }}</a></h4>
+                    <h4 class="my-0 font-weight-normal"><a href="{% url 'product' object.pk%}">{{ object.name }}</a></h4>
                 </div>
                 <div class="card-body">
-                    <img src="{% mediapath product.image %}">
-                    <h1 class="card-title pricing-card-title">$ {{ product.price }}</h1>
-                    <p>{{ product.description|truncatechars:100 }}</p>
+                    <img src="{% mediapath object.image %}">
+                    <h1 class="card-title pricing-card-title">$ {{ object.price }}</h1>
+                    <p>{{ object.description|truncatechars:100 }}</p>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>- Неограниченная лицензия</li>
                         <li>- Поддержка</li>
