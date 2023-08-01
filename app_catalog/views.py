@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
 from app_catalog.models import Product
+from app_catalog.forms import ProductForm
 
 # Create your views here.
 
@@ -27,3 +28,23 @@ class ProductView(DetailView):
     model = Product
     template_name = 'catalog/product.html'
     context_object_name = "product"
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    template_name = 'catalog/product_create.html'
+    form_class = ProductForm
+    success_url = reverse_lazy('Index')
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('Index')
+    template_name = 'catalog/product_delete_confirmation.html'
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'catalog/product_create.html'
+    form_class = ProductForm
+    success_url = reverse_lazy('Index')
