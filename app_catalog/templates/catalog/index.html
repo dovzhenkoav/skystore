@@ -31,7 +31,14 @@
                         <li>- Установка на сервер</li>
                         <li>- Получение обновлений</li>
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+                    {% if object.version %}
+                    <div style="padding: 1px 10px; display: inline-block;  border: 3px solid black; margin-left: 20px; margin-bottom: 10px">
+                        <h3 style="font-size: 16px">Активная версия!</h3>
+                        <p style="font-size: 12px">Название: {{ object.version|get_item:'name' }}</p>
+                        <p style="font-size: 12px">Номер: {{ object.version|get_item:'number' }}</p>
+                    </div>
+                    {% endif %}
+                    <button style="display: block" type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
                 </div>
             </div>
         </div>

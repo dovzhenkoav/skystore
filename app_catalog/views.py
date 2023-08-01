@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
-from app_catalog.models import Product
+from app_catalog.models import Product, Version
 from app_catalog.forms import ProductForm
 
 # Create your views here.
@@ -11,6 +11,19 @@ from app_catalog.forms import ProductForm
 class IndexView(ListView):
     model = Product
     template_name = 'catalog/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        active_versions = Version.objects.filter(is_active=True)
+        for product in context['object_list']:
+            version = active_versions.filter(product=product)
+            if version:
+                product.version = {
+                    'name': version[0].name,
+                    'number': version[0].number,
+                }
+                print(product.version)
+        return context
 
 
 class ContactsView(TemplateView):
