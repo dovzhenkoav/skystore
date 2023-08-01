@@ -10,6 +10,9 @@
         продать</p>
 </div>
 
+<button type="button" class="btn btn-lg btn-block btn-outline-primary" ><a href="{% url 'product_create' %}" style="text-decoration: none;">Добавить новый продукт</a></button>
+
+
 {% for object in object_list %}
 <div class="container">
     <div class="row text-center">
@@ -19,7 +22,7 @@
                     <h4 class="my-0 font-weight-normal"><a href="{% url 'product' object.pk%}">{{ object.name }}</a></h4>
                 </div>
                 <div class="card-body">
-                    <img src="{% mediapath object.image %}">
+                    <img src="{% mediapath object.image %}" width="600px">
                     <h1 class="card-title pricing-card-title">$ {{ object.price }}</h1>
                     <p>{{ object.description|truncatechars:100 }}</p>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
@@ -28,7 +31,14 @@
                         <li>- Установка на сервер</li>
                         <li>- Получение обновлений</li>
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+                    {% if object.version %}
+                    <div style="padding: 1px 10px; display: inline-block;  border: 3px solid black; margin-left: 20px; margin-bottom: 10px">
+                        <h3 style="font-size: 16px">Активная версия!</h3>
+                        <p style="font-size: 12px">Название: {{ object.version|get_item:'name' }}</p>
+                        <p style="font-size: 12px">Номер: {{ object.version|get_item:'number' }}</p>
+                    </div>
+                    {% endif %}
+                    <button style="display: block" type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
                 </div>
             </div>
         </div>

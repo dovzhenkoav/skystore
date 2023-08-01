@@ -21,7 +21,7 @@
                     <h2 class="my-0 font-weight-normal"><a href="{% url 'post_details' post.slug%}">{{ post.name }}</a></h2>
                 </div>
                 <div class="card-body">
-                    <img src="{% mediapath post.image %}">
+                    <img src="{% mediapath post.image %}" width="600px">
                     <p>{{ post.description|truncatechars:100 }}</p>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>- Создан: {{ post.created_at }}</li>

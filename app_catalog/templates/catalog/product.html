@@ -28,6 +28,8 @@ HI
                         <li>Дата последнего изменения: {{ product.last_changed_at }}</li>
                     </ul>
                     <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" ><a href="{% url 'product_edit' product.pk %}" style="text-decoration: none;">Редактировать продукт</a></button>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" ><a href="{% url 'product_delete' product.pk %}" style="text-decoration: none;">Удалить продукт</a></button>
                 </div>
             </div>
         </div>

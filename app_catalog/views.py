@@ -1,8 +1,10 @@
+from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
-from app_catalog.models import Product
+from app_catalog.models import Product, Version
+from app_catalog.forms import ProductForm
 
 # Create your views here.
 
@@ -10,6 +12,19 @@ from app_catalog.models import Product
 class IndexView(ListView):
     model = Product
     template_name = 'catalog/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        active_versions = Version.objects.filter(is_active=True)
+        for product in context['object_list']:
+            version = active_versions.filter(product=product)
+            if version:
+                product.version = {
+                    'name': version[0].name,
+                    'number': version[0].number,
+                }
+                print(product.version)
+        return context
 
 
 class ContactsView(TemplateView):
@@ -27,3 +42,40 @@ class ProductView(DetailView):
     model = Product
     template_name = 'catalog/product.html'
     context_object_name = "product"
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    template_name = 'catalog/product_create.html'
+    form_class = ProductForm
+    success_url = reverse_lazy('Index')
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('Index')
+    template_name = 'catalog/product_delete_confirmation.html'
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'catalog/product_create.html'
+    form_class = ProductForm
+    success_url = reverse_lazy('Index')
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # Модель1 - модель2 - форма из forms.py - сколько раз надо повторить её на странице
+        ProductFormset = inlineformset_factory(Product, Version, form=ProductForm, extra=1)
+        if self.request.method == 'POST':  # Нужно дополнительно указывать поведение для get и post запроса
+            context_data['formset'] = ProductFormset(self.request.POST, instance=self.object)
+        else:
+            context_data['formset'] = ProductFormset(instance=self.object)
+        return context_data
+
+    def form_valid(self, form):
+        formset = self.get_context_data()['formset']
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+        return super().form_valid(form)
