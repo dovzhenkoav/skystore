@@ -14,7 +14,18 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Save">Сохранить</input>
+
+        {% if formset %}
+            {{ formset.management_form }}
+            {% for form in formset.forms %}
+            {{ form.as_p }}
+                {% if not forloop.last %}
+                   <br>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+    <input type="submit" value="Save">Сохранить</input>
     </form>
 
 {% endblock %}

@@ -1,3 +1,4 @@
+from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
@@ -61,3 +62,20 @@ class ProductUpdateView(UpdateView):
     template_name = 'catalog/product_create.html'
     form_class = ProductForm
     success_url = reverse_lazy('Index')
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # Модель1 - модель2 - форма из forms.py - сколько раз надо повторить её на странице
+        ProductFormset = inlineformset_factory(Product, Version, form=ProductForm, extra=1)
+        if self.request.method == 'POST':  # Нужно дополнительно указывать поведение для get и post запроса
+            context_data['formset'] = ProductFormset(self.request.POST, instance=self.object)
+        else:
+            context_data['formset'] = ProductFormset(instance=self.object)
+        return context_data
+
+    def form_valid(self, form):
+        formset = self.get_context_data()['formset']
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+        return super().form_valid(form)
