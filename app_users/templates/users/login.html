@@ -1,7 +1,7 @@
 {% extends 'catalog/base.html' %}
 {% load mediapath %}
 
-{% block title %}Blog{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
@@ -10,31 +10,12 @@
         продать</p>
 </div>
 
-    <h2>Создание нового продукта</h2>
+<div class="container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-
-        {% if formset %}
-            {{ formset.management_form }}
-            {% for form in formset.forms %}
-            {{ form.as_p }}
-                {% if not forloop.last %}
-                   <br>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-    <input type="submit" value="Save">Сохранить</input>
+        <input type="submit" value="Save">Сохранить</input>
     </form>
+</div>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
