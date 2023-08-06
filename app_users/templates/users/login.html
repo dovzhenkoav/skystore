@@ -9,7 +9,9 @@
     <p class="lead">Skystore - это отличный вариант хранения ваших плагинов и примеров кода, который вы бы хотели
         продать</p>
 </div>
-
+{% if con_message %}
+<h2>{{ con_message }}</h2>
+{% endif %}
 <div class="container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
