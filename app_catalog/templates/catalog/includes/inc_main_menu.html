@@ -4,5 +4,16 @@
         <a class="p-2 btn btn-outline-primary" href="/">Каталог</a>
         <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
         <a class="p-2 btn btn-outline-primary" href="/blog/">Блог</a>
+        {% if user.is_authenticated %}
+        <div>
+        <p style="display: inline-block;">Hi, <span style="color: forestgreen;">{{ user.email }}</span></p>
+        <a href="{% url 'logout' %}">Logout</a>
+        </div>
+        {% else %}
+        <div>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+        </div>
+        {% endif %}
     </nav>
 </div>

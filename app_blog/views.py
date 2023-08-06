@@ -32,10 +32,11 @@ class PostDetailView(DetailView):
 
 
 class PostCreateView(CreateView):
+
     model = BlogPost
     fields = ('name', 'description', 'image',)
     success_url = reverse_lazy('all_posts')
-    template_name = 'blog/product_create.html'
+    template_name = 'blog/post_create.html'
 
     def form_valid(self, form):
         if form.is_valid():
@@ -48,7 +49,7 @@ class PostCreateView(CreateView):
 class PostUpdateView(UpdateView):
     model = BlogPost
     fields = ('name', 'description', 'image',)
-    template_name = 'blog/product_create.html'
+    template_name = 'blog/post_create.html'
 
     def form_valid(self, form):
         if form.is_valid():
