@@ -7,6 +7,7 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from app_catalog.models import Product, Version
 from app_catalog.forms import ProductForm
 
+from config import settings
 # Create your views here.
 
 
@@ -55,6 +56,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('Index')
 
     def form_valid(self, form):
+
         if form.is_valid():
             new_form = form.save()
             new_form.author = self.request.user
