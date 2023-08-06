@@ -1,4 +1,5 @@
 from django.forms import inlineformset_factory
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
@@ -44,20 +45,36 @@ class ProductView(DetailView):
     context_object_name = "product"
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
+    login_url = reverse_lazy('login')
+    redirect_field_name = "redirect_to"
+
     model = Product
     template_name = 'catalog/product_create.html'
     form_class = ProductForm
     success_url = reverse_lazy('Index')
 
+    def form_valid(self, form):
+        if form.is_valid():
+            new_form = form.save()
+            new_form.author = self.request.user
+            new_form.save()
+        return super().form_valid(form)
 
-class ProductDeleteView(DeleteView):
+
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
+    login_url = reverse_lazy('login')
+    redirect_field_name = "redirect_to"
+
     model = Product
     success_url = reverse_lazy('Index')
     template_name = 'catalog/product_delete_confirmation.html'
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = reverse_lazy('login')
+    redirect_field_name = "redirect_to"
+
     model = Product
     template_name = 'catalog/product_create.html'
     form_class = ProductForm
@@ -67,7 +84,7 @@ class ProductUpdateView(UpdateView):
         context_data = super().get_context_data(**kwargs)
         # Модель1 - модель2 - форма из forms.py - сколько раз надо повторить её на странице
         ProductFormset = inlineformset_factory(Product, Version, form=ProductForm, extra=1)
-        if self.request.method == 'POST':  # Нужно дополнительно указывать поведение для get и post запроса
+        if self.request.method == 'POST':
             context_data['formset'] = ProductFormset(self.request.POST, instance=self.object)
         else:
             context_data['formset'] = ProductFormset(instance=self.object)
